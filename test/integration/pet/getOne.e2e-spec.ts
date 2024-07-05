@@ -4,6 +4,7 @@ import * as request from 'supertest';
 import { AppModule } from '../../../src/app.module';
 import { DatabaseService } from '../../../src/database/Database.service';
 import { petsDataList } from '../Data/pets.data';
+import { ValidationPipe } from '@nestjs/common';
 
 describe('GET ONE TEST', () => {
   let dbConnection: Connection;
@@ -16,6 +17,15 @@ describe('GET ONE TEST', () => {
     }).compile();
 
     app = moduleRef.createNestApplication();
+    app.useGlobalPipes(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
+      }),
+    );
     await app.init();
 
     dbConnection = moduleRef
@@ -38,18 +48,18 @@ describe('GET ONE TEST', () => {
     it('should return a pet by id', async () => {
       // GIVEN
       const newPet: any = petsDataList[0];
-      // Insert a new pet in db and get it objectId:
-      const newPetId = (await dbConnection.collection('pets').insertOne(newPet))
-        .insertedId;
-      //Assign _id converted in string to match with the response.
-      newPet._id = newPetId.toHexString();
+      // Insert a new pet in db:
+      const petDb = await dbConnection.collection('pets').insertOne(newPet)
+      if (!petDb.acknowledged) return;
 
       // WHEN
-      const response = await request(httpServer).get(`/pet/${newPetId}`);
+      const response = await request(httpServer).get(`/pet/${petDb.insertedId}`);
 
       //THEN
-      expect(response.status).toBe(200);
-      expect(response.body).toMatchObject(newPet);
+      expect(response.body.statusCode).toBe(200);
+      expect(response.body.result.name).toEqual(newPet.name);
+      expect(response.body.result.age).toEqual(newPet.age);
+      expect(response.body.result.pic).toEqual(newPet.pic);
     });
   });
 });

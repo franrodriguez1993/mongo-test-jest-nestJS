@@ -5,8 +5,8 @@ import {
   Get,
   Delete,
   Param,
-  Put,
   Patch,
+  HttpStatus,
 } from '@nestjs/common';
 import { PetService } from './pet.service';
 import { PetDto, UpdatePetDto } from './pet.dto';
@@ -16,27 +16,35 @@ export class PetController {
   constructor(private readonly petService: PetService) {}
 
   @Post()
-  create(@Body() createPetDto: PetDto) {
-    return this.petService.create(createPetDto);
+  async create(@Body() createPetDto: PetDto) {
+    const data = await this.petService.create(createPetDto);
+    return {statusCode:HttpStatus.CREATED,result:data}
   }
 
   @Get()
-  findAll() {
-    return this.petService.findAll();
+ async findAll() {
+    const data = await this.petService.findAll();
+    return {statusCode:HttpStatus.OK,result:data}
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.petService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    const data = await this.petService.findOne(id);
+    return {statusCode:HttpStatus.OK,result:data}
   }
 
   @Patch(':id')
-  updateOne(@Param('id') id: string, @Body() dto: UpdatePetDto) {
-    return this.petService.updateOne(id, dto);
+  async updateOne(@Param('id') id: string, @Body() dto: UpdatePetDto) {
+    const data = await this.petService.updateOne(id, dto);
+    return {statusCode:HttpStatus.OK,result:data}
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.petService.remove(id);
+  async remove(@Param('id') id: string) {
+    const data = await this.petService.remove(id);
+    return {
+      statusCode: HttpStatus.OK,
+      result:data
+    }
   }
 }

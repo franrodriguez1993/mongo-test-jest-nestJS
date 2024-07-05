@@ -31,7 +31,7 @@ export class PetService {
   async remove(id: string) {
     const del = await this.petModel.deleteOne({ _id: id });
     if (del.deletedCount !== 1) {
-      return { msg: 'Pet not deleted' };
+      return 'Pet not deleted';
     }
     return 'Pet deleted';
   }
