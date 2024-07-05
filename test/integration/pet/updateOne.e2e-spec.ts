@@ -1,11 +1,8 @@
-import { Test } from '@nestjs/testing';
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
-import { AppModule } from '../../../src/app.module';
-import { DatabaseService } from '../../../src/database/Database.service';
 import { petsDataList } from '../Data/pets.data';
 import { UpdatePetDto } from '../../../src/App/modules/pet/pet.dto';
-import { ValidationPipe } from '@nestjs/common';
+import { ApiTestConfig } from '../Data/api.config';
 
 describe('UPDATE ONE TEST', () => {
   let dbConnection: Connection;
@@ -13,27 +10,10 @@ describe('UPDATE ONE TEST', () => {
   let app: any;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule],
-    }).compile();
-
-    app = moduleRef.createNestApplication();
-    app.useGlobalPipes(
-      new ValidationPipe({
-        whitelist: true,
-        forbidNonWhitelisted: true,
-        transformOptions: {
-          enableImplicitConversion: true,
-        },
-      }),
-    );
-    await app.init();
-
-    dbConnection = moduleRef
-      .get<DatabaseService>(DatabaseService)
-      .getDBHandle();
-
-    httpServer = await app.getHttpServer();
+    const { appTest, dbConnectionTest, httpServerTest } = await new ApiTestConfig().init()
+    app = appTest;
+    dbConnection = dbConnectionTest;
+    httpServer = httpServerTest;
   });
 
   afterAll(async () => {

@@ -18,7 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:pet": "jest --config ./test/integration/jest-e2e.json --runInBand",
-    "test:pet-test": "jest --config ./test/integration/jest-e2e.json ./test/integration/pet/delete.e2e-spec.ts"
+    "test:pet-test": "jest --config ./test/integration/jest-e2e.json ./test/integration/pet/create.e2e-spec.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.1",
