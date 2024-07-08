@@ -2,7 +2,7 @@ import { Test } from "@nestjs/testing";
 import { AppModule } from "../../../src/app.module";
 import { ValidationPipe } from "@nestjs/common";
 import { Connection } from "mongoose";
-import { DatabaseService } from "../../../src/database/Database.service";
+import { DatabaseService } from "@database/Database.service";
 
 export class ApiTestConfig {
   dbConnectionTest: Connection;

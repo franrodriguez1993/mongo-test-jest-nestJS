@@ -1,7 +1,7 @@
 import { Connection } from 'mongoose';
 import * as request from 'supertest';
 import { petsDataList } from '../Data/pets.data';
-import { UpdatePetDto } from '../../../src/App/modules/pet/pet.dto';
+import { UpdatePetDto } from '@modules/pet/pet.dto';
 import { ApiTestConfig } from '../Data/api.config';
 
 describe('UPDATE ONE TEST', () => {

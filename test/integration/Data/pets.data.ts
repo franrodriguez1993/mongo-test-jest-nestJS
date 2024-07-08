@@ -1,4 +1,4 @@
-import { PetDto } from '../../../src/App/modules/pet/pet.dto';
+import { PetDto } from '@modules/pet/pet.dto';
 
 export const petsDataList: PetDto[] = [
   { name: 'juanchi', age: 2, pic: 'https://image.com' },
